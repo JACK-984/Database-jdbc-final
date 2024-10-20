@@ -9,7 +9,9 @@ public class Appointment {
 
   private int appointmentId;
   private int patientId;
+  private String patientName;
   private int doctorId;
+  private String doctorName;
   private Date date;
   private Time time;
   private String status;
@@ -32,6 +34,22 @@ public class Appointment {
   }
 
   // Getters and Setters
+  public String getPatientName() {
+    return patientName;
+  }
+
+  public void setPatientName(String patientName) {
+    this.patientName = patientName;
+  }
+
+  public String getDoctorName() {
+    return doctorName;
+  }
+
+  public void setDoctorName(String doctorName) {
+    this.doctorName = doctorName;
+  }
+
   public int getAppointmentId() {
     return appointmentId;
   }
@@ -140,18 +158,27 @@ public class Appointment {
   }
 
   public static Appointment getById(int appointmentId) throws SQLException {
-    String sql = "SELECT * FROM Appointments WHERE AppointmentID = ?";
+    String sql =
+      "SELECT a.appointmentID, p.patientID, p.Name as PatientName, d.doctorID, d.Name as DoctorName, a.Date, a.Time, a.Status " +
+      "FROM appointments a " +
+      "JOIN patients p ON a.patientID = p.patientID " +
+      "JOIN doctors d ON a.doctorID = d.doctorID " +
+      "WHERE a.appointmentID = ?";
+
     try (
       Connection conn = DBConnection.getConnection();
       PreparedStatement pstmt = conn.prepareStatement(sql)
     ) {
       pstmt.setInt(1, appointmentId);
+
       try (ResultSet rs = pstmt.executeQuery()) {
         if (rs.next()) {
           Appointment appointment = new Appointment();
-          appointment.setAppointmentId(rs.getInt("AppointmentID"));
-          appointment.setPatientId(rs.getInt("PatientID"));
-          appointment.setDoctorId(rs.getInt("DoctorID"));
+          appointment.setAppointmentId(rs.getInt("appointmentID"));
+          appointment.setPatientId(rs.getInt("patientID"));
+          appointment.setPatientName(rs.getString("PatientName"));
+          appointment.setDoctorId(rs.getInt("doctorID"));
+          appointment.setDoctorName(rs.getString("DoctorName"));
           appointment.setDate(rs.getDate("Date"));
           appointment.setTime(rs.getTime("Time"));
           appointment.setStatus(rs.getString("Status"));
@@ -164,7 +191,11 @@ public class Appointment {
 
   public static List<Appointment> getAll() throws SQLException {
     List<Appointment> appointments = new ArrayList<>();
-    String sql = "SELECT * FROM Appointments";
+    String sql =
+      "SELECT a.appointmentID, p.patientID, p.Name as PatientName, d.doctorID, d.Name as DoctorName, a.Date, a.Time, a.Status " +
+      "FROM appointments a " +
+      "JOIN patients p ON a.patientID = p.patientID " +
+      "JOIN doctors d ON a.doctorID = d.doctorID";
     try (
       Connection conn = DBConnection.getConnection();
       Statement stmt = conn.createStatement();
@@ -172,9 +203,11 @@ public class Appointment {
     ) {
       while (rs.next()) {
         Appointment appointment = new Appointment();
-        appointment.setAppointmentId(rs.getInt("AppointmentID"));
-        appointment.setPatientId(rs.getInt("PatientID"));
-        appointment.setDoctorId(rs.getInt("DoctorID"));
+        appointment.setAppointmentId(rs.getInt("appointmentID"));
+        appointment.setPatientId(rs.getInt("patientID"));
+        appointment.setPatientName(rs.getString("PatientName"));
+        appointment.setDoctorId(rs.getInt("doctorID"));
+        appointment.setDoctorName(rs.getString("DoctorName"));
         appointment.setDate(rs.getDate("Date"));
         appointment.setTime(rs.getTime("Time"));
         appointment.setStatus(rs.getString("Status"));
@@ -186,22 +219,22 @@ public class Appointment {
 
   @Override
   public String toString() {
-    return (
-      "Appointment{" +
-      "appointmentId=" +
-      appointmentId +
-      ", patientId=" +
-      patientId +
-      ", doctorId=" +
-      doctorId +
-      ", date=" +
-      date +
-      ", time=" +
-      time +
-      ", status='" +
-      status +
-      '\'' +
-      '}'
+    return String.format(
+      "Appointment Details:\n" +
+      "  ID:        %d\n" +
+      "  Patient:   %s (ID: %d)\n" +
+      "  Doctor:    %s (ID: %d)\n" +
+      "  Date:      %s\n" +
+      "  Time:      %s\n" +
+      "  Status:    %s",
+      appointmentId,
+      patientName,
+      patientId,
+      doctorName,
+      doctorId,
+      date,
+      time,
+      status
     );
   }
 }

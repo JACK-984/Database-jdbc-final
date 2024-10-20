@@ -171,22 +171,18 @@ public class Doctor {
 
   @Override
   public String toString() {
-    return (
-      "Doctor{" +
-      "doctorId=" +
-      doctorId +
-      ", name='" +
-      name +
-      '\'' +
-      ", specialty='" +
-      specialty +
-      '\'' +
-      ", yearsOfExperience=" +
-      yearsOfExperience +
-      ", contactInformation='" +
-      contactInformation +
-      '\'' +
-      '}'
+    return String.format(
+      "Doctor Details:\n" +
+      "  ID:                  %d\n" +
+      "  Name:                %s\n" +
+      "  Specialty:           %s\n" +
+      "  Years of Experience: %d\n" +
+      "  Contact Information: %s",
+      doctorId,
+      name,
+      specialty,
+      yearsOfExperience,
+      contactInformation
     );
   }
 }

@@ -202,28 +202,22 @@ public class Patient {
 
   @Override
   public String toString() {
-    return (
-      "Patient{" +
-      "patientId=" +
-      patientId +
-      ", name='" +
-      name +
-      '\'' +
-      ", age=" +
-      age +
-      ", gender='" +
-      gender +
-      '\'' +
-      ", address='" +
-      address +
-      '\'' +
-      ", contactNumber='" +
-      contactNumber +
-      '\'' +
-      ", medicalHistory='" +
-      medicalHistory +
-      '\'' +
-      '}'
+    return String.format(
+      "Patient Details:\n" +
+      "  ID:               %d\n" +
+      "  Name:             %s\n" +
+      "  Age:              %d\n" +
+      "  Gender:           %s\n" +
+      "  Address:          %s\n" +
+      "  Contact Number:   %s\n" +
+      "  Medical History:  %s",
+      patientId,
+      name,
+      age,
+      gender,
+      address,
+      contactNumber,
+      medicalHistory
     );
   }
 }
