@@ -224,16 +224,10 @@ public class Main {
     System.out.println("\nAdd Patient");
     System.out.print("Enter patient name: ");
     String name = scanner.nextLine();
-    if (name == null || name.isEmpty()) {
-      System.out.println("Patient name cannot be empty.");
-      return;
-    }
+    
     System.out.print("Enter patient age: ");
     int age = scanner.nextInt();
-    if (age <= 0) {
-      System.out.println("Invalid patient age.");
-      return;
-    }
+   
     scanner.nextLine(); // Consume newline
 
     System.out.print("Enter patient gender (Male/Female/Other): ");
